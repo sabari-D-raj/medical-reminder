@@ -7,9 +7,9 @@ class database:
     def table(self):
         self.cursor.execute("""CREATE TABLE IF NOT EXISTS medicine (
                                 id INTEGER PRIMARY KEY AUTOINCREMENT    ,
-                             medicine_name TEXT,
-                            dosage TEXT,
-                            time TEXT,
+                             medicine_name TEXT NOT NULL,
+                            dosage TEXT NOT NULL,
+                            time  DATETIME DEFAULT CURRENT_TIMESTAMP,
                             how_many_times_a_day TEXT
                             )""")
         self.cursor.execute(""" CREATE TABLE IF NOT EXISTS Adherence (
