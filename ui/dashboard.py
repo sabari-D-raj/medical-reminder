@@ -1,13 +1,14 @@
 import tkinter as tk
 from analaysis import adherence
 class dashboard(tk.Frame):
-    def __init__(self,parent):
+    def __init__(self, parent, analytics):
         super().__init__(parent)
-        self.analaysis=adherence
-        self.label=tk.Label(self,text="overall adhrence 0%").pack()
+        self.analytics = analytics
+        self.label = tk.Label(self, text="overall adherence 0%")
+        self.label.pack()
         self.refresh()
     def refresh(self):
-        percent=self.analaysis.AdherenceAnalytics.overall_adherence()
-        self.label.config(text=f"overall adherence: {percent}").pack()
+        percent = self.analytics.overall_adherence()
+        self.label.config(text=f"overall adherence: {percent}%")
             
             

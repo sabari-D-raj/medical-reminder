@@ -3,6 +3,7 @@ class database:
     def __init__(self,name="medications.db"):
         self.conn= sqlite3.connect(name)
         self.cursor=self.conn.cursor()
+        self.table()
 
     def table(self):
         self.cursor.execute("""CREATE TABLE IF NOT EXISTS medicine (
@@ -19,7 +20,7 @@ class database:
                             med_id INTEGER,
                             date TEXT,
                             taken INTEGER,
-                            FORIGEN KEY (med_id) REFRENCES medicine(id)
+                            FOREIGN KEY (med_id) REFERENCES medicine(id)
                             ON UPDATE CASCADE 
                             ON DELETE CASCADE
                             )""")

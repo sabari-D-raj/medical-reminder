@@ -1,6 +1,6 @@
 import tkinter as tk
 from ui import medice
-from ui import dashboard
+from ui.dashboard import dashboard
 from DATABASE import db
 from analaysis import adherence
 class main_window(tk.Frame):
