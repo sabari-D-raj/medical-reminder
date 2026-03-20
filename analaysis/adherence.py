@@ -1,7 +1,7 @@
 from datetime import datetime
 from DATABASE import db
 class AdherenceAnalytics:
-    def __init__(self):
+    def __init__(self,db:db.database):
         self.db = db
 
     def mark_taken(self, med_id, taken=True):
@@ -13,8 +13,9 @@ class AdherenceAnalytics:
         self.db.conn.commit()
 
     def overall_adherence(self):
-        self.db.cursor.execute("SELECT COUNT(*), SUM(taken) FROM Adherence")
-        total, taken = self.db.cursor.fetchone()
-        if total == 0:
-            return 0
-        return int((taken / total) * 100)
+         self.db.cursor.execute("SELECT COUNT(*), SUM(taken) FROM Adherence")
+         total, taken = self.db.cursor.fetchone()
+         if total == 0:
+             return 0
+         return int((taken / total) * 100)
+        

@@ -6,18 +6,23 @@ class database:
         self.cursor=self.conn.cursor()
     def table(self):
         self.cursor.execute("""CREATE TABLE IF NOT EXISTS medicine (
-                                id INTEGER PRIMARY KEY AUTOINCREMENT    ,
+                                id INTEGER PRIMARY KEY AUTO_INCREMENT,
                              medicine_name TEXT NOT NULL,
                             dosage TEXT NOT NULL,
                             time  DATETIME DEFAULT CURRENT_TIMESTAMP,
-                            how_many_times_a_day TEXT
+                            times_a_day INTEGER NOT NULL,
+                            days_to_take INTEGER NOT NULL
                             )""")
+        
         self.cursor.execute(""" CREATE TABLE IF NOT EXISTS Adherence (
                             
-                            id INTEGER PRIMARY KEY AUTOIMCREMENT,
+                            id INTEGER PRIMARY KEY AUTO_INCREMENT,
                             med_id INTEGER,
                             date TEXT,
-                            taken INTEGER
+                            taken INTEGER,
+                            FORIGEN KEY med_id REFRENCES medicine(id)
+                            ON UPDATE CASCADE 
+                            ON DELETE CASCADE
                             )""")
         
         self.conn.commit()

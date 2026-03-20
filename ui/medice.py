@@ -1,8 +1,7 @@
 import tkinter as tk
-#from  tkinter import ttk
 from DATABASE import db
 class medicine_window(tk.Toplevel):
-    def __init__(self,parent,refresh_callback):
+    def __init__(self,parent,refresh_callback ):
             super().__init__(parent)
             self.db=db
             self.title("add medication")
