@@ -1,12 +1,12 @@
 import sqlite3
-
 class database:
     def __init__(self,name="medications.db"):
         self.conn= sqlite3.connect(name)
         self.cursor=self.conn.cursor()
+
     def table(self):
         self.cursor.execute("""CREATE TABLE IF NOT EXISTS medicine (
-                                id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                                id INTEGER PRIMARY KEY AUTOINCREMENT,
                              medicine_name TEXT NOT NULL,
                             dosage TEXT NOT NULL,
                             time  DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -15,12 +15,11 @@ class database:
                             )""")
         
         self.cursor.execute(""" CREATE TABLE IF NOT EXISTS Adherence (
-                            
-                            id INTEGER PRIMARY KEY AUTO_INCREMENT,
+                            id INTEGER PRIMARY KEY AUTOINCREMENT,
                             med_id INTEGER,
                             date TEXT,
                             taken INTEGER,
-                            FORIGEN KEY med_id REFRENCES medicine(id)
+                            FORIGEN KEY (med_id) REFRENCES medicine(id)
                             ON UPDATE CASCADE 
                             ON DELETE CASCADE
                             )""")

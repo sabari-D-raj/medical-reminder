@@ -1,7 +1,7 @@
 import tkinter as tk
 from DATABASE import db
 class medicine_window(tk.Toplevel):
-    def __init__(self,parent,refresh_callback ):
+    def __init__(self,parent,refresh_callback,db:db.database):
             super().__init__(parent)
             self.db=db
             self.title("add medication")
@@ -17,11 +17,11 @@ class medicine_window(tk.Toplevel):
             self.repation=tk.Entry(self).pack()
             tk.Button(self,text="save",command=self.save).pack()
     def save(self):
-          self.db.execute("""INSERT INTO medicine ( medicine_name,dosage,time,how many times a day) VALUES (?,?,?,?)  """,
+          self.db.cursor.execute("""INSERT INTO medicine ( medicine_name,dosage,time,how many times a day) VALUES (?,?,?,?)  """,
                           (self.name_entry.get(),
                            self.dosage_entry.get(),
                            self.time_entry.get(),
                            self.repation.get())
                           )
           self.refresh_callback()
-db.conn.commit()
+          self.db.conn.commit()

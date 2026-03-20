@@ -8,11 +8,13 @@ class main_window(tk.Frame):
                 super().__init__(root)
                 self.db=db
                 self.analytics=analytics
-                tk.Label(self,text="MEDICINE REMINDER " ,font=('Arial',20))
+                tk.Label(self,text="MEDICINE REMINDER " ,font=('Arial',20)).pack()
                 self.listbox=tk.Listbox(self)
                 self.listbox.pack(padx=20)
-                self.button=tk.Button(text="+add-medicine",command=self.addmed)
-                self.dash=dashboard(self,analytics.overall_adherence())
+                self.button=tk.Button(self,text="+add-medicine",command=self.addmed)
+                self.button.pack(pady=10)
+                self.dash=dashboard(self,analytics)
+
 
     def refresh_list(self):
             self.listbox.delete(0,tk.END)
@@ -22,7 +24,7 @@ class main_window(tk.Frame):
             self.dash.refresh()
 
     def addmed(self):
-            medice(self,self.db,self.refresh_list)
+                medice.medicine_window(self,self.refresh_list,self.db)
 
 
 

@@ -7,7 +7,7 @@ class dashboard(tk.Frame):
         self.label=tk.Label(self,text="overall adhrence 0%").pack()
         self.refresh()
     def refresh(self):
-        percent=self.analaysis.overall_adherence()
+        percent=self.analaysis.AdherenceAnalytics.overall_adherence()
         self.label.config(text=f"overall adherence: {percent}").pack()
             
             
