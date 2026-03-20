@@ -8,20 +8,31 @@ class medicine_window(tk.Toplevel):
             self.refresh_callback=refresh_callback
             self.geometry("450x450")
             tk.Label(self,text="Name").pack()
-            self.name_entry=tk.Entry(self).pack()
+            self.name_entry=tk.Entry(self)
+            self.name_entry.pack()
             tk.Label(self,text="Dosage").pack()
-            self.dosage_entry=tk.Entry(self).pack()
+            self.dosage_entry=tk.Entry(self)
+            self.dosage_entry.pack()
+            
             tk.Label(self,text="Time").pack()
-            self.time_entry=tk.Entry(self).pack()
+            self.time_entry=tk.Entry(self)
+            self.time_entry.pack()
             tk.Label(self,text="Time of repeation").pack()
-            self.repation=tk.Entry(self).pack()
+            self.repation=tk.Entry(self)
+            self.repation.pack()
+            tk.Label(self,text="days to take").pack()
+            self.days=tk.Entry(self)
+            self.days.pack()
             tk.Button(self,text="save",command=self.save).pack()
+            
+
     def save(self):
-          self.db.cursor.execute("""INSERT INTO medicine ( medicine_name,dosage,time,how many times a day) VALUES (?,?,?,?)  """,
+          self.db.cursor.execute("""INSERT INTO medicine ( medicine_name,dosage,time,times_a_day,days_to_take ) VALUES (?,?,?,?,?)  """,
                           (self.name_entry.get(),
                            self.dosage_entry.get(),
                            self.time_entry.get(),
-                           self.repation.get())
+                           self.repation.get(),
+                           self.days.get())
                           )
           self.refresh_callback()
           self.db.conn.commit()
