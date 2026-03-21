@@ -10,7 +10,7 @@ class main_window(tk.Frame):
                 super().__init__(root)
                 self.db=db
                 self.analytics=analytics
-                tk.Label(self,text="MEDICINE REMINDER " ,font=('Arial',20)).pack()
+                tk.Label(self,text="MEDICINE TRACKER " ,font=('Arial',20)).pack()
                 self.listbox=tk.Listbox(self,width=80,font=("Arial",15))
                 self.listbox.pack(padx=20)
                 self.button=tk.Button(self,text="+add-medicine",command=self.addmed)
