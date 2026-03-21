@@ -107,7 +107,6 @@ The app will track each dose and calculate compliance percentage for each medici
 - Export adherence reports
 - Mobile app support
 ## VEDIO
-
 <video controls src="../Videos/Captures/main.py - medical reminderr - Visual Studio Code 2026-03-21 11-16-25.mp4" title="Title"></video>
 
 ## future-updates
