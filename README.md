@@ -106,7 +106,12 @@ The app will track each dose and calculate compliance percentage for each medici
 - Multiple user profiles
 - Export adherence reports
 - Mobile app support
+## VEDIO
 
+<video controls src="../Videos/Captures/main.py - medical reminderr - Visual Studio Code 2026-03-21 11-16-25.mp4" title="Title"></video>
+
+## future-updates
+   day by day dashboard, more normalized database ,if patient miss a medicine message goes to there phone
 ## developed By:
     -sabari Raj RS
     https://github.com/sabari-D-raj

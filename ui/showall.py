@@ -11,7 +11,7 @@ class main_window(tk.Frame):
                 self.db=db
                 self.analytics=analytics
                 tk.Label(self,text="MEDICINE REMINDER " ,font=('Arial',20)).pack()
-                self.listbox=tk.Listbox(self)
+                self.listbox=tk.Listbox(self,width=80,font=("Arial",15))
                 self.listbox.pack(padx=20)
                 self.button=tk.Button(self,text="+add-medicine",command=self.addmed)
                 self.button.pack(pady=10)
@@ -23,15 +23,14 @@ class main_window(tk.Frame):
 
     def refresh_list(self):
             self.listbox.delete(0,tk.END)
-            self.db.cursor.execute("SELECT id,medicine_name,dosage,times_a_day FROM medicine" )
+            self.db.cursor.execute("SELECT id,medicine_name,dosage,times_a_day,days_to_take FROM medicine" )
             self.dist={}
             id=0
             for med in self.db.cursor.fetchall():
                     self.dist[id]=med[0]
-                    self.listbox.insert(tk.END,f"{med[1]}-{med[2]}-{med[3]}")
+                    self.listbox.insert(tk.END,f"{med[1]}-{med[2]}-{med[3]}-{med[4]}")
                     id += 1
             self.dash.refresh()
-            print(self.dist)
 
     def addmed(self):
         med_window=medice.medicine_window(self,self.refresh_list,self.db)
@@ -47,9 +46,6 @@ class main_window(tk.Frame):
             self.db.cursor.execute("DELETE FROM medicine WHERE id=?", (med_id,))
             self.refresh_list()
             self.db.conn.commit()
-            print(f"Deleted medicine with ID: {med_id}")
-            print(selected)
-            
 
 
                 
