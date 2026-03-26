@@ -61,7 +61,6 @@ class database:
         
         self.conn.commit()
     def get_medicine_adherence_trends(self, med_id):
-        """Get daily adherence for a specific medicine"""
         self.cursor.execute("""
             SELECT date, taken FROM Adherence 
             WHERE med_id = ? 
@@ -70,7 +69,6 @@ class database:
         return self.cursor.fetchall()
 
     def get_medicine_weekly_adherence(self, med_id):
-        """Get weekly adherence percentage for specific medicine"""
         date_threshold = (datetime.now() - timedelta(days=7)).strftime("%Y-%m-%d")
         self.cursor.execute("""
             SELECT COUNT(*), SUM(taken) FROM Adherence 
@@ -82,7 +80,6 @@ class database:
         return int((taken / total) * 100)
 
     def get_medicine_monthly_adherence(self, med_id):
-        """Get monthly adherence percentage for specific medicine"""
         date_threshold = (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d")
         self.cursor.execute("""
             SELECT COUNT(*), SUM(taken) FROM Adherence 
@@ -93,7 +90,6 @@ class database:
             return 0
         return int((taken / total) * 100)
     def get_adherence_trends_by_week(self):
-        """Get adherence trends grouped by week"""
         self.cursor.execute("""
             SELECT strftime('%Y-W%W', date) as week, COUNT(*) as total, SUM(taken) as taken
             FROM Adherence
@@ -104,7 +100,6 @@ class database:
         return self.cursor.fetchall()
 
     def get_adherence_trends_by_month(self):
-        """Get adherence trends grouped by month"""
         self.cursor.execute("""
             SELECT strftime('%Y-%m', date) as month, COUNT(*) as total, SUM(taken) as taken
             FROM Adherence
@@ -115,7 +110,6 @@ class database:
         return self.cursor.fetchall()
 
     def get_medicine_trends_by_month(self, med_id):
-        """Get specific medicine trends by month"""
         self.cursor.execute("""
             SELECT strftime('%Y-%m', date) as month, COUNT(*) as total, SUM(taken) as taken
             FROM Adherence
@@ -125,7 +119,6 @@ class database:
         """, (med_id,))
         return self.cursor.fetchall()
     def get_missed_doses_by_medicine(self):
-        """Get all missed doses grouped by medicine"""
         self.cursor.execute("""
             SELECT m.id, m.medicine_name, COUNT(a.id) as missed_count
             FROM medicine m
@@ -136,7 +129,6 @@ class database:
         return self.cursor.fetchall()
 
     def get_missed_doses_by_date_range(self, start_date, end_date):
-        """Get missed doses within a date range"""
         self.cursor.execute("""
             SELECT a.id, m.medicine_name, a.date
             FROM Adherence a
@@ -147,7 +139,6 @@ class database:
         return self.cursor.fetchall()
 
     def get_missed_doses_detail(self):
-        """Get detailed missed doses report"""
         self.cursor.execute("""
             SELECT m.id, m.medicine_name, COUNT(a.id) as total_missed, 
                    GROUP_CONCAT(a.date) as missed_dates
@@ -158,7 +149,6 @@ class database:
         """)
         return self.cursor.fetchall()
     def get_adherence_streak(self, med_id):
-        """Get current consecutive days of adherence for a medicine"""
         self.cursor.execute("""
             SELECT date FROM Adherence 
             WHERE med_id = ? AND taken = 1
@@ -184,7 +174,6 @@ class database:
         return streak
 
     def get_longest_streak(self, med_id):
-        """Get longest adherence streak for a medicine"""
         self.cursor.execute("""
             SELECT date FROM Adherence 
             WHERE med_id = ? AND taken = 1
@@ -211,7 +200,6 @@ class database:
         return max(max_streak, current_streak)
 
     def get_streaks_all_medicines(self):
-        """Get current and longest streaks for all medicines"""
         self.cursor.execute("SELECT id FROM medicine")
         medicines = self.cursor.fetchall()
         
@@ -223,7 +211,6 @@ class database:
         
         return streaks
     def update_stock_quantity(self, med_id, quantity):
-        """Update stock quantity for a medicine"""
         self.cursor.execute(
             "UPDATE medicine SET stock_quantity = ? WHERE id = ?",
             (quantity, med_id)
@@ -231,13 +218,11 @@ class database:
         self.conn.commit()
 
     def get_stock_quantity(self, med_id):
-        """Get current stock quantity"""
         self.cursor.execute("SELECT stock_quantity FROM medicine WHERE id = ?", (med_id,))
         result = self.cursor.fetchone()
         return result[0] if result else 0
 
     def get_medicines_low_stock(self, threshold=10):
-        """Get medicines with stock below threshold"""
         self.cursor.execute("""
             SELECT id, medicine_name, dosage, stock_quantity, times_a_day
             FROM medicine
@@ -247,13 +232,12 @@ class database:
         return self.cursor.fetchall()
 
     def estimate_refill_date(self, med_id):
-        """Estimate when medicine needs refill based on usage"""
         med = self.get_medicine_by_id(med_id)
         if not med:
             return None
         
         stock = self.get_stock_quantity(med_id)
-        times_per_day = med[4]  # times_a_day
+        times_per_day = med[4]  
         
         if times_per_day == 0:
             return None
@@ -262,7 +246,6 @@ class database:
         refill_date = datetime.now() + timedelta(days=days_until_empty)
         return refill_date.strftime("%Y-%m-%d")
     def add_side_effect(self, med_id, effect_name, severity="mild"):
-        """Log a side effect"""
         date = datetime.now().strftime("%Y-%m-%d")
         self.cursor.execute(
             "INSERT INTO SideEffects (med_id, effect_name, severity, date_reported) VALUES (?, ?, ?, ?)",
@@ -272,7 +255,6 @@ class database:
         return self.cursor.lastrowid
 
     def get_side_effects_for_medicine(self, med_id):
-        """Get all side effects for a medicine"""
         self.cursor.execute(
             "SELECT id, effect_name, severity, date_reported FROM SideEffects WHERE med_id = ? ORDER BY date_reported DESC",
             (med_id,)
@@ -280,7 +262,6 @@ class database:
         return self.cursor.fetchall()
 
     def get_all_side_effects(self):
-        """Get all side effects grouped by medicine"""
         self.cursor.execute("""
             SELECT m.id, m.medicine_name, COUNT(s.id) as effect_count, GROUP_CONCAT(s.effect_name) as effects
             FROM medicine m
@@ -291,12 +272,10 @@ class database:
         return self.cursor.fetchall()
 
     def delete_side_effect(self, effect_id):
-        """Delete a side effect record"""
         self.cursor.execute("DELETE FROM SideEffects WHERE id = ?", (effect_id,))
         self.conn.commit()
 
     def get_common_side_effects(self):
-        """Get most common side effects"""
         self.cursor.execute("""
             SELECT effect_name, COUNT(*) as count, severity
             FROM SideEffects
@@ -306,7 +285,6 @@ class database:
         """)
         return self.cursor.fetchall()
     def add_interaction(self, med_id_1, med_id_2, interaction_desc, severity="moderate"):
-        """Add a drug interaction"""
         self.cursor.execute(
             "INSERT INTO DrugInteractions (med_id_1, med_id_2, interaction_desc, severity) VALUES (?, ?, ?, ?)",
             (med_id_1, med_id_2, interaction_desc, severity)
@@ -315,7 +293,6 @@ class database:
         return self.cursor.lastrowid
 
     def get_interactions_for_medicine(self, med_id):
-        """Get all interactions for a specific medicine"""
         self.cursor.execute("""
             SELECT di.id, m1.medicine_name, m2.medicine_name, di.interaction_desc, di.severity
             FROM DrugInteractions di
@@ -326,7 +303,6 @@ class database:
         return self.cursor.fetchall()
 
     def check_interactions(self, med_id):
-        """Check all interactions for a medicine against currently taken medicines"""
         medicines = self.get_all_medicines()
         med_ids = [m[0] for m in medicines]
         
@@ -343,7 +319,6 @@ class database:
         return interactions
 
     def get_all_interactions(self):
-        """Get all drug interactions"""
         self.cursor.execute("""
             SELECT di.id, m1.medicine_name, m2.medicine_name, di.interaction_desc, di.severity
             FROM DrugInteractions di
@@ -354,12 +329,10 @@ class database:
         return self.cursor.fetchall()
 
     def delete_interaction(self, interaction_id):
-        """Delete an interaction record"""
         self.cursor.execute("DELETE FROM DrugInteractions WHERE id = ?", (interaction_id,))
         self.conn.commit()
 
     def get_high_severity_interactions(self):
-        """Get only high severity interactions"""
         self.cursor.execute("""
             SELECT di.id, m1.medicine_name, m2.medicine_name, di.interaction_desc
             FROM DrugInteractions di
@@ -369,7 +342,6 @@ class database:
         """)
         return self.cursor.fetchall()
     def add_doctor_note(self, med_id, note_text):
-        """Add a doctor's note to a medicine"""
         date = datetime.now().strftime("%Y-%m-%d")
         self.cursor.execute(
             "INSERT INTO DoctorNotes (med_id, note_text, date_added) VALUES (?, ?, ?)",
@@ -379,7 +351,6 @@ class database:
         return self.cursor.lastrowid
 
     def get_doctor_notes_for_medicine(self, med_id):
-        """Get all doctor notes for a medicine"""
         self.cursor.execute(
             "SELECT id, note_text, date_added FROM DoctorNotes WHERE med_id = ? ORDER BY date_added DESC",
             (med_id,)
@@ -387,7 +358,6 @@ class database:
         return self.cursor.fetchall()
 
     def get_all_doctor_notes(self):
-        """Get all doctor notes for all medicines"""
         self.cursor.execute("""
             SELECT m.id, m.medicine_name, dn.note_text, dn.date_added
             FROM DoctorNotes dn
@@ -397,7 +367,6 @@ class database:
         return self.cursor.fetchall()
 
     def update_doctor_note(self, note_id, note_text):
-        """Update a doctor note"""
         self.cursor.execute(
             "UPDATE DoctorNotes SET note_text = ? WHERE id = ?",
             (note_text, note_id)
@@ -405,7 +374,6 @@ class database:
         self.conn.commit()
 
     def delete_doctor_note(self, note_id):
-        """Delete a doctor note"""
         self.cursor.execute("DELETE FROM DoctorNotes WHERE id = ?", (note_id,))
         self.conn.commit()
     def add_medicine(self, medicine_name, dosage, times_a_day, days_to_take):
