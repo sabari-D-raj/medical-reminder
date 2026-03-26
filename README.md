@@ -325,5 +325,7 @@ https://github.com/user-attachments/assets/5b1b6fa3-a0c5-4938-a61a-965ea5b7d7c5
    day by day dashboard, more normalized database ,if patient miss a medicine message goes to there phone
 ## developed By:
     -sabari Raj RS
-    -Adithyan T Nair
     https://github.com/sabari-D-raj
+    -Adithyan T Nair
+    https://github.com/Adithyan-T-Nair
+    
