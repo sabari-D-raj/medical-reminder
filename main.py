@@ -5,7 +5,7 @@ import tkinter as tk
 def main():
     root=tk.Tk()
     root.title("medicine reminder")
-    root.geometry("500x500")
+    root.geometry("900x750")
     database=db.database()
     analytics=adherence.AdherenceAnalytics(database)
     app=showall.main_window(root,analytics,database)
