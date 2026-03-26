@@ -154,7 +154,6 @@ class refill_reminders_window(tk.Toplevel):
         for med_id, name, dosage, time, times_per_day, days_to_take, stock in medicines:
             refill_date = self.db.estimate_refill_date(med_id)
             
-            # Status indicator
             if stock <= 5:
                 status = "🔴 CRITICAL"
             elif stock <= 10:

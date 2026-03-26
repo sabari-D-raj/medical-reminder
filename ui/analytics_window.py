@@ -66,7 +66,7 @@ class analytics_window(tk.Toplevel):
         
         self.adherence_text.insert(tk.END, f"{label}: {percent}%\n\n")
         
-        # Show daily breakdown
+
         trends = self.db.get_medicine_trends_by_month(med_id)
         self.adherence_text.insert(tk.END, "Monthly Breakdown:\n")
         self.adherence_text.insert(tk.END, "-" * 50 + "\n")
