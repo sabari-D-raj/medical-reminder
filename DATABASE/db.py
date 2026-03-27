@@ -59,6 +59,16 @@ class database:
                             ON DELETE CASCADE
                             )""")
         
+        self.cursor.execute("""
+            CREATE TRIGGER IF NOT EXISTS decrement_stock_on_adherence
+            AFTER INSERT ON Adherence
+            WHEN NEW.taken = 1
+            BEGIN
+                UPDATE medicine SET stock_quantity = stock_quantity - 1 
+                WHERE id = NEW.med_id AND stock_quantity > 0;
+            END
+        """)
+        
         self.conn.commit()
     def get_medicine_adherence_trends(self, med_id):
         self.cursor.execute("""
